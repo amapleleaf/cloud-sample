@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: spring-cloud-eureka
+
+server:
+  port: 8800
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false #禁止自己当做服务注册
+    fetchRegistry: false #屏蔽注册信息
+  service-url:
+    defaultZone: http://192.168.9.6:${server.port}/eureka/
+  server:
+    #关闭自我保护
+    enable-self-preservation: false
+    #启用主动失效，并且每次主动失效检测间隔，默认60s
+    eviction-interval-timer-in-ms: 30000
+

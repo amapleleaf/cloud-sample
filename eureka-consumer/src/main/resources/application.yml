@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: eureka-consumer
+server:
+  port: 8820
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.9.6:8800/eureka/
+    #eureka client刷新本地缓存时间,从Eureka服务器端获取注册信息的间隔时间，默认30秒
+    registry-fetch-interval-seconds: 10
+  instance:
+      ip-address: 192.168.9.6
+      prefer-ip-address: true
+      instance-id: ${spring.cloud.client.ip-address}:${server.port}
+      #服务刷新时间配置，每隔这个时间会主动心跳一次，默认30秒
+      lease-renewal-interval-in-seconds: 5
+      #服务过期时间配置,超过这个时间没有接收到心跳EurekaServer就会将这个实例剔除，默认90秒
+      #注意，EurekaServer一定要设置eureka.server.eviction-interval-timer-in-ms否则这个配置无效，这个配置一般为服务刷新时间配置的三倍
+      lease-expiration-duration-in-seconds: 15
+ribbon:
+  #连接超时时间
+  ConnectTimeout: 10000
+  #读取超时时间
+  ReadTimeout: 10000
+  #刷新服务列表源的间隔时间
+  ServerListRefreshInterval: 5000
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+      isolation:
+        timeoutInMilliseconds: 30
