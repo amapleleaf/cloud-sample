@@ -13,12 +13,19 @@ import java.util.Map;
 public class NacosTestController {
     @Autowired
     private Environment env;
-    @Value("${email.address}")
+    @Value("${email.address:}")
     private String emailAddress;
     @RequestMapping("nacosconfig")
     public Map<String,String> oneNacosConfig(String key){
         Map<String,String> result = new HashMap<>();
         result.put("email.address",emailAddress);
+        result.put(key,env.getProperty(key));
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return result;
     }
 }

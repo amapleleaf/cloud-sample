@@ -13,6 +13,7 @@
         <module>eureka-producer</module>
         <module>eureka-server</module>
         <module>service-api</module>
+        <module>sentinel-dashboard-nacos</module>
     </modules>
 
 </project>
