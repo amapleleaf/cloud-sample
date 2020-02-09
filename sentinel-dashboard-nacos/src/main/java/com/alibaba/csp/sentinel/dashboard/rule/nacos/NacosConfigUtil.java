@@ -40,6 +40,8 @@ public final class NacosConfigUtil {
 
     public static final String DEGRADE_DATA_ID_POSTFIX = "-degrade-rules";
     public static final String PARAMFLOW_DATA_ID_POSTFIX = "-paramflow-rules";
+    public static final String SYSTEM_DATA_ID_POSTFIX="-system-rules";
+    public static final String AUTHORITY_DATA_ID_POSTFIX = "-authority-rules";
 
 
     private NacosConfigUtil() {}
