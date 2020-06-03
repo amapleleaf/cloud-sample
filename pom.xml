@@ -14,6 +14,11 @@
         <module>eureka-server</module>
         <module>service-api</module>
         <module>sentinel-dashboard-nacos</module>
+        <module>dubbo-service-api</module>
+        <module>nacos-http-producer</module>
+        <module>nacos-http-consumer</module>
+        <module>nacos-dubbo-provider</module>
+        <module>nacos-dubbo-client</module>
     </modules>
 
 </project>
