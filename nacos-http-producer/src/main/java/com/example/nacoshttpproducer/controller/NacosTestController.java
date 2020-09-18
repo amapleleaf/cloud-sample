@@ -20,7 +20,7 @@ public class NacosTestController {
         Map<String,String> result = new HashMap<>();
         result.put("email.address",emailAddress);
         result.put(key,env.getProperty(key));
-
+        result.put("server.port",env.getProperty("server.port"));
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {

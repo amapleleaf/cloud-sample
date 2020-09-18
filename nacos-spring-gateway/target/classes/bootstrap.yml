@@ -1,0 +1,27 @@
+server:
+  port: 6090
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: gateway
+spring:
+  application:
+    name: nacos-spring-gateway
+  cloud:
+    nacos:
+      server-addr: 192.168.8.16:8848
+      discovery:
+        namespace: a2f2557b-08ac-4c62-bc6b-0c38a67dd18c
+        group: example
+
+nacos-http-producer:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+
+jwt:
+  base64:
+    security: MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY=
