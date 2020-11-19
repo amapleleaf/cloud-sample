@@ -25,6 +25,7 @@
         <module>nacos-dubbo-provider</module>
         <module>nacos-dubbo-client</module>
         <module>nacos-spring-gateway</module>
+        <module>common-sample</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
