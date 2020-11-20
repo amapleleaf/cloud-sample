@@ -27,4 +27,9 @@ public class UserAction {
         return ResponseResult.success(sysUserService.selectUsers(sysUser,pageRequest));
     }
 
+    @RequestMapping("saveSysUser")
+    public ResponseResult saveSysUsert(SysUser sysUser){
+        return ResponseResult.success(sysUserService.saveSysUser(sysUser));
+    }
+
 }

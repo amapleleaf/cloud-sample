@@ -11,4 +11,6 @@ public interface ISysUserService {
     String getAccessToken(SysUser sysUser);
 
     PageInfo<SysUser> selectUsers(SysUser sysUser, PageRequest pageRequest);
+
+    int saveSysUser(SysUser sysUser);
 }

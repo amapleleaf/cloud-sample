@@ -51,5 +51,10 @@ public class SysUserService implements ISysUserService {
         return pageResult;
     }
 
+    @Override
+    public int saveSysUser(SysUser sysUser){
+        sysUser.setSalt("123321");
+        return sysUserMapper.insert(sysUser);
+    }
 
 }

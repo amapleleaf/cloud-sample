@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.sample.common.model.SysUser">
     <constructor>
       <idArg column="USER_ID" javaType="java.lang.Long" jdbcType="DECIMAL" />
-      <arg column="USER_ACCOUNT" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="USER_ACCOUNT" javaType="java.lang.String" jdbcType="VARCHAR"  />
       <arg column="USER_NAME" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="PASSWORD" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="SALT" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -28,9 +28,9 @@
     from sys_user where user_account=#{user_account}
   </select>
 
-  <select id="selectUsers" resultMap="BaseResultMap" parameterType="com.sample.common.model.SysUser">
+  <select id="selectUsers" resultType="com.sample.common.model.SysUser" parameterType="com.sample.common.model.SysUser">
     select
-    <include refid="Base_Column_List"></include>
+    USER_ID, USER_ACCOUNT, USER_NAME,LOCKED
     from sys_user where 1=1
     <trim suffixOverrides=",">
       <if test="userName != null and userName != ''">
@@ -54,7 +54,7 @@
     insert into SYS_USER (USER_ID, USER_ACCOUNT, USER_NAME, 
       PASSWORD, SALT, LOCKED
       )
-    values (#{userId,jdbcType=DECIMAL}, #{userAccount,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+    values (SYS_USER_SEQ.NEXTVAL, #{userAccount,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
       #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{locked,jdbcType=VARCHAR}
       )
   </insert>
@@ -81,9 +81,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        #{userId,jdbcType=DECIMAL},
-      </if>
+      SYS_USER_SEQ.NEXTVAL,
       <if test="userAccount != null">
         #{userAccount,jdbcType=VARCHAR},
       </if>
