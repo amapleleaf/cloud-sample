@@ -30,6 +30,7 @@ comment on column sys_role.available is '是否可用,1：可用，0不可用';
 -------------------------------------------------------------------------
 create table sys_menu (
   menu_id number(10) not null,
+  menu_code varchar2(128) not null ,
   menu_name varchar2(128) not null ,
   menu_type varchar2(32) not null,
   ico varchar2(128) default null,
@@ -38,7 +39,7 @@ create table sys_menu (
   order_no  number(10) default null,
   available  char(1) default '1'
 );
-alter table sys_menu add constraint sys_menu_pk primary key (role_id);
+alter table sys_menu add constraint sys_menu_pk primary key (menu_id);
 comment on table sys_menu is '菜单表';
 comment on column sys_menu.menu_id is '主键';
 comment on column sys_menu.menu_name is '资源名称';
@@ -54,7 +55,7 @@ create table sys_role_menu (
   sys_role_id varchar2(32) not null,
   sys_menu_id varchar2(32) not null
 );
-comment on table sys_role_menu is '角色权限表(对角色和权限表的一个包装)';
+comment on table sys_role_menu is '角色权限表';
 comment on column sys_role_menu.id is 'id';
 comment on column sys_role_menu.sys_role_id is '角色id';
 comment on column sys_role_menu.sys_menu_id is '权限id';
@@ -68,8 +69,6 @@ comment on table sys_user_role is '用户角色表';
 comment on column sys_user_role.id is '主键';
 comment on column sys_user_role.sys_user_id is '用户id';
 comment on column sys_user_role.sys_role_id is '角色id';
-
-
 -----------------------------------------------------------------------------
 CREATE SEQUENCE sys_user_seq
        minvalue 100000
@@ -92,4 +91,23 @@ begin
   end loop;
   commit;
 end;
+------------------------------------------------------------------------------------
+insert into sys_menu (MENU_ID, MENU_NAME, MENU_TYPE, ICO, ACTION_URL, PARENT_ID, ORDER_NO, AVAILABLE, MENU_CODE)
+values (1, '首页', 'menu', 'el-icon-s-home', null, 0, 1, '1', 'Home');
 
+insert into sys_menu (MENU_ID, MENU_NAME, MENU_TYPE, ICO, ACTION_URL, PARENT_ID, ORDER_NO, AVAILABLE, MENU_CODE)
+values (2, '系统配置', 'menu', 'el-icon-setting', null, 0, 2, '1', 'SysConf');
+
+insert into sys_menu (MENU_ID, MENU_NAME, MENU_TYPE, ICO, ACTION_URL, PARENT_ID, ORDER_NO, AVAILABLE, MENU_CODE)
+values (3, '用户管理', 'menu', 'el-icon-user', null, 2, 3, '1', 'UserManage');
+
+insert into sys_menu (MENU_ID, MENU_NAME, MENU_TYPE, ICO, ACTION_URL, PARENT_ID, ORDER_NO, AVAILABLE, MENU_CODE)
+values (4, '菜单管理', 'menu', 'el-icon-user', null, 2, 4, '1', 'MenuManage');
+
+insert into sys_role (ROLE_ID, ROLE_NAME, AVAILABLE)
+values (1, '管理员', '1');
+
+insert into sys_role (ROLE_ID, ROLE_NAME, AVAILABLE)
+values (2, '业务员', '1');
+commit;
+------------------------------------------------------------------------------------

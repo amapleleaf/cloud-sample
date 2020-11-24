@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sample.common.dao.SysRoleMapper">
+  <resultMap id="BaseResultMap" type="com.sample.common.model.SysRole">
+    <constructor>
+      <idArg column="ROLE_ID" javaType="java.lang.Long" jdbcType="DECIMAL" />
+      <arg column="ROLE_NAME" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="AVAILABLE" javaType="java.lang.String" jdbcType="CHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    ROLE_ID, ROLE_NAME, AVAILABLE
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_ROLE
+    where ROLE_ID = #{roleId,jdbcType=DECIMAL}
+  </select>
+  <select id="selectRoles" resultType="com.sample.common.model.SysRole">
+    select
+    <include refid="Base_Column_List" />
+    from SYS_ROLE where 1=1
+    <trim suffixOverrides=",">
+      <if test="roleName != null and roleName != ''">
+        and ROLE_NAME =#{roleName}
+      </if>
+      <if test="available != null and available != ''">
+        and AVAILABLE =#{available}
+      </if>
+    </trim>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from SYS_ROLE
+    where ROLE_ID = #{roleId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.sample.common.model.SysRole">
+    insert into SYS_ROLE (ROLE_ID, ROLE_NAME, AVAILABLE
+      )
+    values (#{roleId,jdbcType=DECIMAL}, #{roleName,jdbcType=VARCHAR}, #{available,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sample.common.model.SysRole">
+    insert into SYS_ROLE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        ROLE_ID,
+      </if>
+      <if test="roleName != null">
+        ROLE_NAME,
+      </if>
+      <if test="available != null">
+        AVAILABLE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        #{roleId,jdbcType=DECIMAL},
+      </if>
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="available != null">
+        #{available,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sample.common.model.SysRole">
+    update SYS_ROLE
+    <set>
+      <if test="roleName != null">
+        ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="available != null">
+        AVAILABLE = #{available,jdbcType=CHAR},
+      </if>
+    </set>
+    where ROLE_ID = #{roleId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sample.common.model.SysRole">
+    update SYS_ROLE
+    set ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+      AVAILABLE = #{available,jdbcType=CHAR}
+    where ROLE_ID = #{roleId,jdbcType=DECIMAL}
+  </update>
+</mapper>

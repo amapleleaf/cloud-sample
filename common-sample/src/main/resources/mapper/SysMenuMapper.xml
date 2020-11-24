@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sample.common.dao.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="com.sample.common.model.SysMenu">
+    <constructor>
+      <idArg column="MENU_ID" javaType="java.lang.Long" jdbcType="DECIMAL" />
+      <arg column="MENU_NAME" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="MENU_TYPE" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="ICO" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="ACTION_URL" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="PARENT_ID" javaType="java.lang.Long" jdbcType="DECIMAL" />
+      <arg column="ORDER_NO" javaType="java.lang.Long" jdbcType="DECIMAL" />
+      <arg column="AVAILABLE" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="MENU_CODE" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    MENU_ID, MENU_NAME, MENU_TYPE, ICO, ACTION_URL, PARENT_ID, ORDER_NO, AVAILABLE, MENU_CODE
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_MENU
+    where MENU_ID = #{menuId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectMenus" resultType="com.sample.common.model.SysMenu">
+    select
+    <include refid="Base_Column_List" />
+    from SYS_MENU where 1=1
+    <trim suffixOverrides=",">
+      <if test="menuName != null and menuName != ''">
+        and MENU_NAME =#{menuName}
+      </if>
+      <if test="available != null and available != ''">
+        and AVAILABLE =#{available}
+      </if>
+    </trim>
+  </select>
+
+  <select id="selectMenusByUserId" resultType="com.sample.common.model.SysMenu">
+    select
+    <include refid="Base_Column_List" />
+    from  sys_user_role ur, sys_role_menu rm,sys_menu m where ur.sys_role_id = rm.sys_role_id and rm.sys_menu_id = m.menu_id
+    and ur.sys_user_id= #{menuId,jdbcType=DECIMAL}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from SYS_MENU
+    where MENU_ID = #{menuId,jdbcType=DECIMAL}
+  </delete>
+
+  <insert id="insert" parameterType="com.sample.common.model.SysMenu">
+    insert into SYS_MENU (MENU_ID, MENU_NAME, MENU_TYPE, 
+      ICO, ACTION_URL, PARENT_ID, 
+      ORDER_NO, AVAILABLE, MENU_CODE
+      )
+    values (#{menuId,jdbcType=DECIMAL}, #{menuName,jdbcType=VARCHAR}, #{menuType,jdbcType=VARCHAR}, 
+      #{ico,jdbcType=VARCHAR}, #{actionUrl,jdbcType=VARCHAR}, #{parentId,jdbcType=DECIMAL}, 
+      #{orderNo,jdbcType=DECIMAL}, #{available,jdbcType=CHAR}, #{menuCode,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.sample.common.model.SysMenu">
+    insert into SYS_MENU
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="menuId != null">
+        MENU_ID,
+      </if>
+      <if test="menuName != null">
+        MENU_NAME,
+      </if>
+      <if test="menuType != null">
+        MENU_TYPE,
+      </if>
+      <if test="ico != null">
+        ICO,
+      </if>
+      <if test="actionUrl != null">
+        ACTION_URL,
+      </if>
+      <if test="parentId != null">
+        PARENT_ID,
+      </if>
+      <if test="orderNo != null">
+        ORDER_NO,
+      </if>
+      <if test="available != null">
+        AVAILABLE,
+      </if>
+      <if test="menuCode != null">
+        MENU_CODE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="menuId != null">
+        #{menuId,jdbcType=DECIMAL},
+      </if>
+      <if test="menuName != null">
+        #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuType != null">
+        #{menuType,jdbcType=VARCHAR},
+      </if>
+      <if test="ico != null">
+        #{ico,jdbcType=VARCHAR},
+      </if>
+      <if test="actionUrl != null">
+        #{actionUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=DECIMAL},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=DECIMAL},
+      </if>
+      <if test="available != null">
+        #{available,jdbcType=CHAR},
+      </if>
+      <if test="menuCode != null">
+        #{menuCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.sample.common.model.SysMenu">
+    update SYS_MENU
+    <set>
+      <if test="menuName != null">
+        MENU_NAME = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuType != null">
+        MENU_TYPE = #{menuType,jdbcType=VARCHAR},
+      </if>
+      <if test="ico != null">
+        ICO = #{ico,jdbcType=VARCHAR},
+      </if>
+      <if test="actionUrl != null">
+        ACTION_URL = #{actionUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        PARENT_ID = #{parentId,jdbcType=DECIMAL},
+      </if>
+      <if test="orderNo != null">
+        ORDER_NO = #{orderNo,jdbcType=DECIMAL},
+      </if>
+      <if test="available != null">
+        AVAILABLE = #{available,jdbcType=CHAR},
+      </if>
+      <if test="menuCode != null">
+        MENU_CODE = #{menuCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MENU_ID = #{menuId,jdbcType=DECIMAL}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.sample.common.model.SysMenu">
+    update SYS_MENU
+    set MENU_NAME = #{menuName,jdbcType=VARCHAR},
+      MENU_TYPE = #{menuType,jdbcType=VARCHAR},
+      ICO = #{ico,jdbcType=VARCHAR},
+      ACTION_URL = #{actionUrl,jdbcType=VARCHAR},
+      PARENT_ID = #{parentId,jdbcType=DECIMAL},
+      ORDER_NO = #{orderNo,jdbcType=DECIMAL},
+      AVAILABLE = #{available,jdbcType=CHAR},
+      MENU_CODE = #{menuCode,jdbcType=VARCHAR}
+    where MENU_ID = #{menuId,jdbcType=DECIMAL}
+  </update>
+</mapper>

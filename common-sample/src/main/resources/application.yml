@@ -21,4 +21,4 @@ pagehelper:
   reasonable: true
 logging:
   level:
-    com.sample.common.dao: info  #打印sql
+    com.sample.common.dao: debug  #打印sql

@@ -5,7 +5,8 @@ import com.sample.common.model.ResponseResult;
 import com.sample.common.model.SysUser;
 import com.sample.common.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,15 @@ public class UserAction {
          return ResponseResult.success(new HashMap<String,String>(){{put("accessToke",accessToke);}});
     }
 
+    @RequestMapping("getLoginUserInfo")
+    public ResponseResult getLoginUserInfo(@RequestHeader("Authorization") String accessToke){
+        if(!StringUtils.isEmpty(accessToke) && accessToke.split(" ").length>1){
+            accessToke = accessToke.split(" ")[1];
+        }
+
+        return ResponseResult.success(sysUserService.getLoginUserInfo(accessToke));
+    }
+
     @RequestMapping("querySysUserList")
     public ResponseResult querySysUserList(SysUser sysUser, PageRequest pageRequest){
         return ResponseResult.success(sysUserService.selectUsers(sysUser,pageRequest));
@@ -31,5 +41,7 @@ public class UserAction {
     public ResponseResult saveSysUsert(SysUser sysUser){
         return ResponseResult.success(sysUserService.saveSysUser(sysUser));
     }
+
+
 
 }
