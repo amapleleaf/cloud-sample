@@ -1,9 +1,7 @@
 package com.sample.common.configure;
 
-import com.sample.common.model.ResponseResult;
 import com.sample.common.model.UserInfo;
 import com.sample.common.util.JwtTokenUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
