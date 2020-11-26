@@ -15,6 +15,7 @@ import com.sample.common.util.BaseException;
 import com.sample.common.util.EncryptionUtil;
 import com.sample.common.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,7 +29,8 @@ public class SysUserService implements ISysUserService {
     private SysUserMapper sysUserMapper;
     @Autowired
     private SysMenuMapper sysMenuMapper;
-    private String base64Secret="MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY=";
+    @Value("${jwt.signing.key}")
+    private String base64Secret;
     @Override
     public String getAccessToken(SysUser sysUser) {
         SysUser result = sysUserMapper.selectByUserAccount(sysUser.getUserAccount());
@@ -67,15 +69,14 @@ public class SysUserService implements ISysUserService {
     }
 
     @Override
-    public Map<String, Object> getLoginUserInfo(String accessToke) {
-        UserInfo jwtUserInfo = JwtTokenUtil.getJWTInfo(accessToke,base64Secret,UserInfo.class);
-        List<SysMenu> sysMenuList = sysMenuMapper.selectMenusByUserId(jwtUserInfo.getUserId());
+    public Map<String, Object> getLoginUserInfo(Long userId) {
+        List<SysMenu> sysMenuList = sysMenuMapper.selectMenusByUserId(userId);
         List<String> menuCodeList = new ArrayList<>();
         sysMenuList.forEach(oneMenu->menuCodeList.add(oneMenu.getMenuCode()));
 
         Map<String,Object> userInfo = new HashMap<>();
         userInfo.put("menuCodeList",menuCodeList);
-        SysUser sysUser = sysUserMapper.selectByPrimaryKey(jwtUserInfo.getUserId());
+        SysUser sysUser = sysUserMapper.selectByPrimaryKey(userId);
         userInfo.put("userName",sysUser.getUserName());
         userInfo.put("userAccount",sysUser.getUserAccount());
         return userInfo;

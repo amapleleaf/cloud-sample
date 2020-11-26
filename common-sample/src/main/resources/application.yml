@@ -25,3 +25,7 @@ pagehelper:
 logging:
   level:
     com.sample.common.dao: debug  #打印sql
+
+jwt:
+  signing:
+    key: MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY=

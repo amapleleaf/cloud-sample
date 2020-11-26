@@ -3,6 +3,7 @@ package com.sample.common.action;
 import com.sample.common.model.PageRequest;
 import com.sample.common.model.ResponseResult;
 import com.sample.common.model.SysUser;
+import com.sample.common.model.UserInfo;
 import com.sample.common.service.ISysUserService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,8 @@ public class UserAction {
     }
 
     @RequestMapping("getLoginUserInfo")
-    public ResponseResult getLoginUserInfo(@RequestHeader("Authorization") String accessToke){
-        if(!StringUtils.isEmpty(accessToke) && accessToke.split(" ").length>1){
-            accessToke = accessToke.split(" ")[1];
-        }
-
-        return ResponseResult.success(sysUserService.getLoginUserInfo(accessToke));
+    public ResponseResult getLoginUserInfo(UserInfo userInfo){
+        return ResponseResult.success(sysUserService.getLoginUserInfo(userInfo.getUserId()));
     }
 
     @RequestMapping("querySysUserList")

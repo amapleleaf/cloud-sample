@@ -13,5 +13,5 @@ public interface ISysUserService {
 
     int saveSysUser(SysUser sysUser);
 
-    Map<String,Object> getLoginUserInfo(String accessToke);
+    Map<String,Object> getLoginUserInfo(Long userId);
 }
