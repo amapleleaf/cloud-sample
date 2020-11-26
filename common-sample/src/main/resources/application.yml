@@ -11,6 +11,9 @@ spring:
         cachePrepStmts: true
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
+  rabbitmq:
+    addresses: '192.168.46.100:5672'
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   #config-location:

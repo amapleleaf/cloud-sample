@@ -9,6 +9,7 @@ import com.sample.common.dao.SysUserMapper;
 import com.sample.common.model.PageRequest;
 import com.sample.common.model.SysMenu;
 import com.sample.common.model.SysUser;
+import com.sample.common.model.UserInfo;
 import com.sample.common.service.ISysUserService;
 import com.sample.common.util.BaseException;
 import com.sample.common.util.EncryptionUtil;
@@ -37,7 +38,8 @@ public class SysUserService implements ISysUserService {
         if(!EncryptionUtil.sha256Hex(sysUser.getPassword(),result.getSalt()).equals(result.getPassword())){
             throw  new BaseException("20000", "用户或密码错误");
         }
-        return JwtTokenUtil.createJWT(result.getUserId()+"", base64Secret);
+
+        return JwtTokenUtil.createJWT(new HashMap<String,Object>(){{put("userId",result.getUserId());put("userAccount",result.getUserAccount());put("userName",result.getUserName());}}, base64Secret);
     }
 
     @Override
@@ -66,14 +68,14 @@ public class SysUserService implements ISysUserService {
 
     @Override
     public Map<String, Object> getLoginUserInfo(String accessToke) {
-        String userId = JwtTokenUtil.getUserId(accessToke,base64Secret);
-        List<SysMenu> sysMenuList = sysMenuMapper.selectMenusByUserId(Long.parseLong(userId));
+        UserInfo jwtUserInfo = JwtTokenUtil.getJWTInfo(accessToke,base64Secret,UserInfo.class);
+        List<SysMenu> sysMenuList = sysMenuMapper.selectMenusByUserId(jwtUserInfo.getUserId());
         List<String> menuCodeList = new ArrayList<>();
         sysMenuList.forEach(oneMenu->menuCodeList.add(oneMenu.getMenuCode()));
 
         Map<String,Object> userInfo = new HashMap<>();
         userInfo.put("menuCodeList",menuCodeList);
-        SysUser sysUser = sysUserMapper.selectByPrimaryKey(Long.parseLong(userId));
+        SysUser sysUser = sysUserMapper.selectByPrimaryKey(jwtUserInfo.getUserId());
         userInfo.put("userName",sysUser.getUserName());
         userInfo.put("userAccount",sysUser.getUserAccount());
         return userInfo;

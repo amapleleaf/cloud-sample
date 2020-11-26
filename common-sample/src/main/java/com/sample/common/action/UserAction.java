@@ -4,6 +4,7 @@ import com.sample.common.model.PageRequest;
 import com.sample.common.model.ResponseResult;
 import com.sample.common.model.SysUser;
 import com.sample.common.service.ISysUserService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -17,6 +18,8 @@ import java.util.HashMap;
 public class UserAction {
     @Autowired
     private ISysUserService sysUserService;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
     @RequestMapping("accesstoken")
     public ResponseResult getAccessToken(SysUser sysUser){
          String accessToke = sysUserService.getAccessToken(sysUser);
