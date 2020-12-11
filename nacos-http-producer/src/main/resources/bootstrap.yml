@@ -1,0 +1,36 @@
+server:
+  port: 6080
+  servlet:
+    context-path: /producer
+spring:
+  application:
+    name: nacos-http-producer
+  cloud:
+    nacos:
+      config:
+        extension-configs:
+          - data-id: common.properties
+            refresh: true
+      discovery:
+        group: example
+        namespace: HTTP-MICROSERVICE
+      server-addr: 192.168.8.16:8848
+    sentinel:
+      datasource:
+        flow:
+          nacos:
+            data-id: ${spring.application.name}-flow-rules
+            group-id: SENTINEL_GROUP
+            rule-type: flow
+            server-addr: ${spring.cloud.nacos.server-addr}
+      filter:
+        url-patterns:
+          - /userconfig/**
+          - /nacosconfig/**
+      log:
+        #默认值${home}/logs/csp/
+        dir: ./logs/
+        #日志带上线程id
+        switch-pid: false
+      transport:
+        dashboard: 192.168.8.16:8858
