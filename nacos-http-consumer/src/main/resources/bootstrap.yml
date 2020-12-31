@@ -1,19 +1,17 @@
 server:
-  port: 6080
-  servlet:
-    context-path: /producer
+  port: 6070
 spring:
   application:
-    name: nacos-http-producer
+    name: nacos-http-consumer
   cloud:
     nacos:
       config:
         extension-configs:
-          - data-id: common.properties
+          - data-id: myconfig.properties
             refresh: true
       discovery:
         group: HTTP-SERVER
-        #namespace: HTTP-MICROSERVICE
+        #snamespace: HTTP-MICROSERVICE
       server-addr: 192.168.8.16:8848
     sentinel:
       datasource:
@@ -23,13 +21,9 @@ spring:
             group-id: SENTINEL_GROUP
             rule-type: flow
             server-addr: ${spring.cloud.nacos.server-addr}
-      filter:
-        url-patterns:
-          - /userconfig/**
-          - /nacosconfig/**
       log:
         #默认值${home}/logs/csp/
-        dir: ./logs/producer/
+        dir: ./logs/consumer/
         #日志带上线程id
         switch-pid: false
       transport:

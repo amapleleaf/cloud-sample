@@ -23,5 +23,5 @@ nacos-http-producer:
     NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
 
 jwt:
-  base64:
+  base64:e
     security: MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY=

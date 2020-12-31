@@ -14,10 +14,10 @@ public class NacosTestController {
     private String nacosHttpProducer="http://nacos-http-producer";
     @Autowired
     private  RestTemplate restTemplate;
-    @RequestMapping("/nacosconfig")
+    @RequestMapping("/consumerconfig")
     public String oneNacosConfig(String key){
 
-        String result = restTemplate.getForObject(nacosHttpProducer+"/nacosconfig?key="+key, String.class);
+        String result = restTemplate.getForObject(nacosHttpProducer+"/producer/nacosconfig?key="+key, String.class);
         return "Return : " + result;
     }
     @RequestMapping("student/{idNo}")

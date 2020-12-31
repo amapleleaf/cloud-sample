@@ -1,22 +1,17 @@
 package com.example.nacosgateway.config;
 
-import com.alibaba.fastjson.JSON;
 import com.example.nacosgateway.model.ResponseCodeEnum;
 import com.example.nacosgateway.model.ResponseResult;
+import com.example.nacosgateway.util.JsonUtils;
 import com.example.nacosgateway.util.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -66,7 +61,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
     private Mono<Void> getVoidMono(ServerHttpResponse serverHttpResponse, ResponseCodeEnum responseCodeEnum) {
          serverHttpResponse.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
          ResponseResult responseResult = ResponseResult.error(responseCodeEnum.getCode(), responseCodeEnum.getMessage());
-         DataBuffer dataBuffer = serverHttpResponse.bufferFactory().wrap(JSON.toJSONString(responseResult).getBytes());
+         DataBuffer dataBuffer = serverHttpResponse.bufferFactory().wrap(JsonUtils.obj2String(responseResult).getBytes());
          return serverHttpResponse.writeWith(Flux.just(dataBuffer));
     }
 

@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: nacos-dubbo-provider
+  cloud:
+    nacos:
+      server-addr: 192.168.8.16:8848
+      discovery:
+        group: DUBBO-SERVER
+      config:
+        file-extension: yml
+  main:
+    allow-bean-definition-overriding: true
+
+dubbo:
+  cloud:
+    subscribed-services: '""'
+  protocol:
+    name: dubbo
+    port: -1
+  scan:
+    base-packages: com.example.nacosdubbo.service

@@ -2,6 +2,7 @@ package com.example.nacoshttpproducer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,13 +12,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RefreshScope
 public class NacosTestController {
     @Autowired
     private Environment env;
     @Value("${email.address:}")
     private String emailAddress;
-    @RequestMapping("nacosconfig/{key}")
-    public Map<String,String> oneNacosConfig(@PathVariable String  key){
+    @RequestMapping("nacosconfig")
+    public Map<String,String> oneNacosConfig(String  key){
         Map<String,String> result = new HashMap<>();
         result.put("email.address",emailAddress);
         result.put(key,env.getProperty(key));
@@ -29,8 +31,8 @@ public class NacosTestController {
         }
         return result;
     }
-    @RequestMapping("userconfig")
-    public Map<String,String> user(String key){
+    @RequestMapping("userconfig/{key}")
+    public Map<String,String> user(@PathVariable String key){
         Map<String,String> result = new HashMap<>();
         result.put("email.address",emailAddress);
         result.put(key,env.getProperty(key));

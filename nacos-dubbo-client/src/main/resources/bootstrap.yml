@@ -1,0 +1,20 @@
+server:
+  port: 6050
+spring:
+  application:
+    name: nacos-dubbo-client
+  cloud:
+    nacos:
+      server-addr: 192.168.8.16:8848
+      discovery:
+        group: DUBBO-SERVER
+  main:
+    allow-bean-definition-overriding: true
+dubbo:
+  cloud:
+    subscribed-services: nacos-dubbo-provider
+  protocols:
+    dubbo:
+      port: -1
+  consumer:
+    check: true

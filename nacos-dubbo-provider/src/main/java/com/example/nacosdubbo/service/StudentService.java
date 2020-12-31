@@ -2,11 +2,12 @@ package com.example.nacosdubbo.service;
 
 import com.sample.cloud.serviceapi.api.IStudentService;
 import com.sample.cloud.serviceapi.api.Student;
+import org.apache.dubbo.config.annotation.DubboService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@org.apache.dubbo.config.annotation.Service(timeout = 60000)
+@DubboService(timeout = 60000)
 public class StudentService implements IStudentService {
     @Override
     public Student queryByIdno(String idNo) {
