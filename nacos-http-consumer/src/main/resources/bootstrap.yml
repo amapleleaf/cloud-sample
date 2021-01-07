@@ -28,3 +28,6 @@ spring:
         switch-pid: false
       transport:
         dashboard: 192.168.8.16:8858
+apache:
+  httpclient:
+    max-total: 600

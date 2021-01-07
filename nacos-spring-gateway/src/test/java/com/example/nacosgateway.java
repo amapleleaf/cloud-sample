@@ -13,11 +13,11 @@ import java.util.concurrent.CompletableFuture;
 
 public class nacosgateway {
     public static void main(String[] args) {
-       //simpleCreate();
+        simpleCreate();
         //createFlux();
        // createMono();
         //createFlux();
-        subscribe();
+        //subscribe();
     }
 
     public  static  void simpleCreate(){
