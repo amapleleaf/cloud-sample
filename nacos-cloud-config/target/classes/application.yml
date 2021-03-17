@@ -1,0 +1,29 @@
+server:
+  port: 9900
+spring:
+  application:
+    name: nacos-cloud-config
+  profiles:
+    #配置spring cloud config的存储仓库，常用的仓库：native、jdbc、git等，详见EnvironmentRepositoryConfiguration类
+    active: native,jdbc
+  cloud:
+    config:
+      server:
+        #jdbc仓库相关配置
+        jdbc:
+          sql: select key, value from cloudconfig where application=? and profile=? and label=?
+        #本地仓库相关配置
+        native:
+          search-locations: classpath:config
+    #使用的注册中心配置
+    nacos:
+      server-addr: 172.16.1.151:8848
+      discovery:
+        group: HTTP-SERVER
+  datasource:
+    username: crh_user
+    password: cairenhui
+    url: jdbc:oracle:thin:@172.16.1.154:1521/crhwskh
+    driver-class-name: oracle.jdbc.OracleDriver
+
+

@@ -15,7 +15,7 @@
         </commentGenerator>
         <!--jdbc的数据库连接 wg_insert 为数据库名字-->
         <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
-                        connectionURL="jdbc:oracle:thin:@192.168.8.11:1521/crhwskh" userId="crh_user"
+                        connectionURL="jdbc:oracle:thin:@172.16.1.154:1521/crhwskh" userId="crh_user"
                         password="cairenhui"></jdbcConnection>
         <!--非必须，类型处理器，在数据库类型和java类型之间的转换控制-->
         <javaTypeResolver>
@@ -58,7 +58,7 @@
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>-->
-        <table tableName="sys_menu" domainObjectName="SysMenu"
+        <table tableName="taskpool" domainObjectName="TaskPool"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>

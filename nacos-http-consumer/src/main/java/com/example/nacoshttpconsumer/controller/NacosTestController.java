@@ -1,6 +1,7 @@
 package com.example.nacoshttpconsumer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,8 @@ public class NacosTestController {
     private String nacosHttpProducer="http://nacos-http-producer";
     @Autowired
     private  RestTemplate restTemplate;
+    @Autowired
+    public ApplicationContext applicationContext;
     @RequestMapping("/consumerconfig")
     public String oneNacosConfig(String key){
 

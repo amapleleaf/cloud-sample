@@ -1,8 +1,10 @@
 package com.example.nacoshttpproducer.controller;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,8 @@ import java.util.Map;
 @RefreshScope
 public class NacosTestController {
     @Autowired
+    public ApplicationContext applicationContext;
+    @Autowired
     private Environment env;
     @Value("${email.address:}")
     private String emailAddress;
@@ -24,6 +28,10 @@ public class NacosTestController {
         result.put("email.address",emailAddress);
         result.put(key,env.getProperty(key));
         result.put("server.port",env.getProperty("server.port"));
+        if("test".equals(key)){
+            //支持从nacos配置复杂的格式
+            result.put(key, JSON.toJSONString(applicationContext.getBean("testProperties")));
+        }
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {

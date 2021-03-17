@@ -11,6 +11,7 @@ spring:
         extension-configs:
           - data-id: common.properties
             refresh: true
+        file-extension: yml
       discovery:
         group: HTTP-SERVER
         #namespace: HTTP-MICROSERVICE
