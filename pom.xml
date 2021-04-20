@@ -28,6 +28,7 @@
         <module>common-sample</module>
         <module>nacos-cloud-config</module>
         <module>nacos-cloud-config-client</module>
+        <module>spring-cloud-oauth</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
