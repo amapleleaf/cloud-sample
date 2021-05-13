@@ -5,7 +5,7 @@ import com.example.nacosgateway.model.ResponseResult;
 import com.example.nacosgateway.util.JsonUtils;
 import com.example.nacosgateway.util.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;

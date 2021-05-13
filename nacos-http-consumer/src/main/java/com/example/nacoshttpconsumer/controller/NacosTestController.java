@@ -1,5 +1,6 @@
 package com.example.nacoshttpconsumer.controller;
 
+import com.example.nacoshttpconsumer.form.IdInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,9 +24,10 @@ public class NacosTestController {
         String result = restTemplate.getForObject(nacosHttpProducer+"/producer/nacosconfig?key="+key, String.class);
         return "Return : " + result;
     }
-    @RequestMapping("student/{idNo}")
-    public Map<String,Object> queryByIdno(@PathVariable("idNo") String idNo) {
-        Map<String,Object> result = restTemplate.getForObject(nacosDubboClient+"/student/"+idNo, Map.class);
+    @RequestMapping("student")
+    public Map<String,Object> queryByIdno(IdInfo idNo) {
+
+        Map<String,Object> result = restTemplate.postForObject(nacosDubboClient+"/student",idNo, Map.class);
         return result;
     }
 }

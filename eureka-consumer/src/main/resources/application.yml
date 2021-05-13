@@ -6,7 +6,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://192.168.9.6:8800/eureka/
+      defaultZone: http://localhost:8800/eureka/
     #eureka client刷新本地缓存时间,从Eureka服务器端获取注册信息的间隔时间，默认30秒
     registry-fetch-interval-seconds: 10
   instance:
@@ -38,3 +38,10 @@ hystrix:
           enabled: false
       isolation:
         timeoutInMilliseconds: 30
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000 # 连接超时时间
+        readTimeout: 5000   # 读超时时间
+        loggerLevel: full # 日志级别

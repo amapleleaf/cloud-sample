@@ -12,7 +12,7 @@ spring:
       discovery:
         group: HTTP-SERVER
         #snamespace: HTTP-MICROSERVICE
-      server-addr: 192.168.8.16:8848
+      server-addr: 172.16.1.151:8848
     sentinel:
       datasource:
         flow:
@@ -31,3 +31,11 @@ spring:
 apache:
   httpclient:
     max-total: 600
+
+default:
+  ribbon:
+    ReadTimeout: 123
+
+nacos-http-producer:
+  ribbon:
+    ReadTimeout: 321
