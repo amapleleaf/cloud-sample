@@ -2,7 +2,10 @@ package com.sample.cloud.apiclient;
 
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.ResourceLoaderAware;
@@ -14,10 +17,12 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,9 +42,8 @@ public class ApiClientScanRegistrar  implements ImportBeanDefinitionRegistrar, R
         AnnotationAttributes mapperScanAttrs = AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(ApiClientScan.class.getName()));
         scanner.addIncludeFilter(new AnnotationTypeFilter(ApiClient.class));
 
-        List<String> basePackages = getBasePackages(mapperScanAttrs);
+        Set<String> basePackages = getBasePackages(mapperScanAttrs,importingClassMetadata);
         for (String scanPackage : basePackages) {
-            Set<BeanDefinition> candidateComponents = scanner.findCandidateComponents(scanPackage);
             for (BeanDefinition candidateComponent : scanner.findCandidateComponents(scanPackage)) {
                 if (candidateComponent instanceof AnnotatedBeanDefinition) {
                     // verify annotated class is an interface
@@ -48,23 +52,47 @@ public class ApiClientScanRegistrar  implements ImportBeanDefinitionRegistrar, R
                     Assert.isTrue(annotationMetadata.isInterface(),
                             "@ApiClient can only be specified on an interface");
 
-                    Map<String, Object> attributes = annotationMetadata .getAnnotationAttributes(ApiClient.class.getCanonicalName());
+                    Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes(ApiClient.class.getCanonicalName());
                     // 获取RestClient注解值
-                   // String baseUrl = (String) annotationMetadata.getAnnotationAttributes(RestClient.class.getName(), true).get("baseUrl");
                     try {
-
                         // 动态定义bean
-                        /*registry.registerBeanDefinition("rest-client--" + b.getBeanClassName(),
-                                BeanDefinitionBuilder.genericBeanDefinition(RestClientFactoryBean.class)
-                                        .addConstructorArgValue(Class.forName(b.getBeanClassName()))
-                                        .addConstructorArgValue(baseUrl)
-                                        .getBeanDefinition());*/
+                        registerClientConfiguration(registry,annotationMetadata,attributes);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }
             }
         }
+    }
+
+    private void registerClientConfiguration(BeanDefinitionRegistry registry, AnnotationMetadata annotationMetadata, Map<String, Object> attributes) {
+        try {
+            BeanDefinitionBuilder builder = BeanDefinitionBuilder .genericBeanDefinition(ApiClientFactoryBean.class);
+            builder.addConstructorArgValue(Class.forName(annotationMetadata.getClassName()));
+            //String alias =  getClientName(attributes) + "ApiClient";
+            String alias =  getClientName(attributes);
+            AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
+            String qualifier = getQualifier(attributes);
+            if (StringUtils.hasText(qualifier)) {
+                alias = qualifier;
+            }
+            builder.addConstructorArgValue(alias);
+            BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, annotationMetadata.getClassName(),new String[] { alias });
+            BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
+            //registry.registerBeanDefinition("ApiClient-" + getClientName(attributes),builder.getBeanDefinition());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private String getQualifier(Map<String, Object> client) {
+        if (client == null) {
+            return null;
+        }
+        String qualifier = (String) client.get("qualifier");
+        if (StringUtils.hasText(qualifier)) {
+            return qualifier;
+        }
+        return null;
     }
     private String getClientName(Map<String, Object> client) {
         if (client == null) {
@@ -73,17 +101,25 @@ public class ApiClientScanRegistrar  implements ImportBeanDefinitionRegistrar, R
         String value = (String) client.get("value");
         if (!StringUtils.hasText(value)) {
             value = (String) client.get("name");
+            return value;
+        }
+        if (StringUtils.hasText(value)) {
+            return value;
         }
         throw new IllegalStateException("Either 'name' or 'value' must be provided in @"
                 + ApiClient.class.getSimpleName());
     }
-    protected List<String> getBasePackages(AnnotationAttributes annoAttrs){
-        List<String> basePackages = new ArrayList<>();
+    protected Set<String> getBasePackages(AnnotationAttributes annoAttrs,AnnotationMetadata importingClassMetadata){
+        Set<String> basePackages =new LinkedHashSet<>();
         basePackages.addAll(
                 Arrays.stream(annoAttrs.getStringArray("value")).filter(StringUtils::hasText).collect(Collectors.toList()));
 
         basePackages.addAll(
                 Arrays.stream(annoAttrs.getStringArray("basePackages")).filter(StringUtils::hasText).collect(Collectors.toList()));
+        if (basePackages.isEmpty()) {
+            basePackages.add(
+                    ClassUtils.getPackageName(importingClassMetadata.getClassName()));
+        }
         return basePackages;
     }
     protected ClassPathScanningCandidateComponentProvider getScanner() {
