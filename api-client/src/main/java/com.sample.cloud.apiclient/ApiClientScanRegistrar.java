@@ -1,5 +1,6 @@
 package com.sample.cloud.apiclient;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -20,10 +23,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,7 +33,6 @@ public class ApiClientScanRegistrar  implements ImportBeanDefinitionRegistrar, R
     private ResourceLoader resourceLoader;
 
     private Environment environment;
-
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
@@ -68,15 +68,22 @@ public class ApiClientScanRegistrar  implements ImportBeanDefinitionRegistrar, R
     private void registerClientConfiguration(BeanDefinitionRegistry registry, AnnotationMetadata annotationMetadata, Map<String, Object> attributes) {
         try {
             BeanDefinitionBuilder builder = BeanDefinitionBuilder .genericBeanDefinition(ApiClientFactoryBean.class);
-            builder.addConstructorArgValue(Class.forName(annotationMetadata.getClassName()));
+            //builder.addConstructorArgValue(Class.forName(annotationMetadata.getClassName()));
+            builder.addPropertyValue("target",Class.forName(annotationMetadata.getClassName()));
             //String alias =  getClientName(attributes) + "ApiClient";
             String alias =  getClientName(attributes);
             AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
-            String qualifier = getQualifier(attributes);
+            /*String qualifier = getQualifier(attributes);
             if (StringUtils.hasText(qualifier)) {
                 alias = qualifier;
+            }*/
+            //builder.addConstructorArgValue(alias);
+            builder.addPropertyValue("name",alias);
+            String invokerClassStr = environment.getProperty("apiclient.invoker."+alias);
+            if(!StringUtils.hasText(invokerClassStr)){
+                throw new RuntimeException("未找到apiclient:"+alias+"对应的invoker配置类！");
             }
-            builder.addConstructorArgValue(alias);
+            builder.addPropertyValue("apiClientIncoker",Class.forName(invokerClassStr));
             BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, annotationMetadata.getClassName(),new String[] { alias });
             BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
             //registry.registerBeanDefinition("ApiClient-" + getClientName(attributes),builder.getBeanDefinition());
@@ -147,4 +154,5 @@ public class ApiClientScanRegistrar  implements ImportBeanDefinitionRegistrar, R
     public void setResourceLoader(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
+
 }

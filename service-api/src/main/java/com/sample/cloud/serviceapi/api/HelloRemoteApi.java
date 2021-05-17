@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("serviceapi")
 public interface HelloRemoteApi {
-    @RequestMapping(name = "/hello")
-    public Student hello(@RequestParam("name") String name);
+    @RequestMapping("hello")
+    Student hello(@RequestParam("name") String name);
+    @RequestMapping("queryname")
+    String queryname(@RequestParam("name") String name);
 }

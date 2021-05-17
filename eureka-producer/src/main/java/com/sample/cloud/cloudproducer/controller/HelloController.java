@@ -8,7 +8,6 @@ import java.util.Random;
 
 @RestController
 public class HelloController implements HelloRemoteApi {
-
     @Override
     public Student hello(String name) {
         Student student = new Student();
@@ -23,4 +22,8 @@ public class HelloController implements HelloRemoteApi {
         return student;
     }
 
+    @Override
+    public String queryname(String name) {
+        return "query";
+    }
 }
