@@ -1,0 +1,7 @@
+2021-06-16 19:28:27.489 INFO [DynamicSentinelProperty] Config will be updated to: []
+2021-06-16 19:28:27.497 INFO [FlowRuleManager] Flow rules loaded: {}
+2021-06-16 19:28:27.510 INFO App name resolved from property csp.sentinel.app.name: nacos-http-consumer
+2021-06-16 19:28:27.511 INFO [SentinelConfig] Application type resolved: 0
+2021-06-16 19:28:27.518 INFO [MetricWriter] Creating new MetricWriter, singleFileSize=52428800, totalFileCount=6
+2021-06-16 19:28:27.540 INFO [FlowRuleManager] Registering new property to flow rule manager
+2021-06-16 19:28:27.541 INFO [FlowRuleManager] Flow rules loaded: {}

@@ -33,7 +33,7 @@ public class NacosTestController {
             result.put(key, JSON.toJSONString(applicationContext.getBean("testProperties")));
         }
         try {
-            Thread.sleep(500);
+            Thread.sleep(15*1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

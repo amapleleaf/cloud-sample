@@ -30,6 +30,8 @@
         <module>nacos-cloud-config-client</module>
         <module>spring-cloud-oauth</module>
         <module>api-client</module>
+        <module>spring-cloud-streams-ample</module>
+        <module>spring-kafka-sample</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

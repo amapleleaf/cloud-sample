@@ -2,7 +2,7 @@ server:
   port: 3001
 spring:
   datasource:
-    url: jdbc:oracle:thin:@192.168.8.11:1521/crhwskh
+    url: jdbc:oracle:thin:@172.16.1.154:1521/crhwskh
     driver-class-name: oracle.jdbc.OracleDriver
     username: crh_user
     password: cairenhui
@@ -12,9 +12,9 @@ spring:
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
   rabbitmq:
-    addresses: '192.168.46.100:5672'
-    username: admin
-    password: admin
+    addresses: '172.16.1.172:5672'
+    username: guest
+    password: guest
     listener:
       type: simple
       simple:

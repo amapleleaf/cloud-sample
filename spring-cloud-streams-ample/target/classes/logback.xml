@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2010-2011 The myBatis Team Licensed under the Apache License, 
+	Version 2.0 (the "License"); you may not use this file except in compliance 
+	with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<!-- Level: TRACE、DEBUG、INFO、WARN 和  ERROR -->
+<configuration debug="false" scan="true" scanPeriod="60 seconds">
+
+	<property name="log.default_pattern" value="%thread %d{yyyyMMdd HH:mm:ss.SSS} [%-5level] : %m - [%logger{30}.%method:%line] %rEx{full}%n" />
+	<property name="log.default_charset" value="utf-8" />
+	<property name="log.home" value="${catalina.home}/logs" />
+	
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${log.default_pattern}</pattern>
+		</encoder>
+	</appender>
+	<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.home}/cpe-sysparam-config.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${log.home}/%d{yyyy-MM-dd}/cpe-sysparam-config-%d{yyyy-MM-dd}.%i.zip</fileNamePattern>
+			<!-- 文件达到100M压缩一个ZIP -->
+			<maxFileSize>100MB</maxFileSize>
+			<!-- 保留60天的历史日志文件(过期自动删除) -->
+			<maxHistory>60</maxHistory>
+			<!-- 当产生的压缩文件累计达到100GB时开始滚动记录(自动删除早于100GB之前的历史日志文件)-->
+			<!-- <totalSizeCap>100GB</totalSizeCap> -->
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${log.default_pattern}</pattern>
+		</encoder>
+	</appender>
+	
+
+	<!-- myibatis -->
+	<logger name="org.apache.ibatis" level="trace" />
+	<logger name="com.cairh.cpe.dispatch.dao" level="debug"/>
+	<logger name="java.sql.Connection" level="debug" />
+	<logger name="java.sql.Statement" level="debug" />
+	<logger name="java.sql.PreparedStatement" level="debug" />
+
+	<root level="debug">
+		<appender-ref ref="stdout" />
+		<appender-ref ref="file" />
+	</root>
+	
+</configuration>

@@ -10,14 +10,14 @@ public class ApiClientFactoryBean implements FactoryBean<Object> , ApplicationCo
     private Class<?> target ;
     private String name;
     private ApplicationContext applicationContext;
-    private Class<? extends ApiClientInvoker> apiClientIncoker;
+    private Class<? extends ApiClientInvoker> apiClientInvoker;
 
     @Override
     public Object getObject() throws Exception {
         return Proxy.newProxyInstance(
                 Thread.currentThread().getContextClassLoader(),
                 new Class[]{target},
-                new ApiClientInvocationHandler(this.target,applicationContext,apiClientIncoker));
+                new ApiClientInvocationHandler(this.target,applicationContext,apiClientInvoker));
     }
 
     @Override
@@ -42,12 +42,12 @@ public class ApiClientFactoryBean implements FactoryBean<Object> , ApplicationCo
         this.name = name;
     }
 
-    public Class<? extends ApiClientInvoker> getApiClientIncoker() {
-        return apiClientIncoker;
+    public Class<? extends ApiClientInvoker> getApiClientInvoker() {
+        return apiClientInvoker;
     }
 
-    public void setApiClientIncoker(Class<? extends ApiClientInvoker> apiClientIncoker) {
-        this.apiClientIncoker = apiClientIncoker;
+    public void setApiClientInvoker(Class<? extends ApiClientInvoker> apiClientInvoker) {
+        this.apiClientInvoker = apiClientInvoker;
     }
 
     public void setTarget(Class<?> target) {

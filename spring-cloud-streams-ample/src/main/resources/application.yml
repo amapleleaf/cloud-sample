@@ -1,0 +1,39 @@
+
+server:
+  port: 8091
+
+spring:
+  application:
+    name: spring-cloud-streams-ample
+  cloud:
+    stream:
+      binders: #需要绑定的rabbitmq的服务信息
+        defaultRabbit:  #定义的名称，用于binding整合
+          type: rabbit  #消息组件类型
+          environment:  #配置rabbitmq连接环境
+            spring:
+              rabbitmq:
+                host: 172.16.1.172    #rabbitmq 服务器的地址
+                port: 5672           #rabbitmq 服务器端口
+                username: guest        #rabbitmq 用户名
+                password: guest        #rabbitmq 密码
+                #virtual-host: /       #虚拟路径
+      bindings:
+        #sysMssageNoticeOutput:
+          #destination: cpe.system.message #表示要使用的Exchange名称定义
+          #binder: defaultRabbit
+        sysMssageNoticeInput:
+          destination: cpe.system.message
+          binder: defaultRabbit
+      rabbit:
+        bindings:
+          #sysMssageNoticeOutput:
+            #producer:
+              #routingKeyExpression: headers.messageType
+          sysMssageNoticeInput:
+            consumer:
+              anonymousGroupPrefix: ${spring.application.name}
+              bindingRoutingKey: sys.msg.sms.#
+
+logging:
+  config: classpath:logback.xml

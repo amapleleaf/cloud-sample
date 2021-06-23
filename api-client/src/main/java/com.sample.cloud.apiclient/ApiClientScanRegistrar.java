@@ -72,7 +72,6 @@ public class ApiClientScanRegistrar  implements ImportBeanDefinitionRegistrar, R
             builder.addPropertyValue("target",Class.forName(annotationMetadata.getClassName()));
             //String alias =  getClientName(attributes) + "ApiClient";
             String alias =  getClientName(attributes);
-            AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
             /*String qualifier = getQualifier(attributes);
             if (StringUtils.hasText(qualifier)) {
                 alias = qualifier;
@@ -83,8 +82,8 @@ public class ApiClientScanRegistrar  implements ImportBeanDefinitionRegistrar, R
             if(!StringUtils.hasText(invokerClassStr)){
                 throw new RuntimeException("未找到apiclient:"+alias+"对应的invoker配置类！");
             }
-            builder.addPropertyValue("apiClientIncoker",Class.forName(invokerClassStr));
-            BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, annotationMetadata.getClassName(),new String[] { alias });
+            builder.addPropertyValue("apiClientInvoker",Class.forName(invokerClassStr));
+            BeanDefinitionHolder holder = new BeanDefinitionHolder(builder.getBeanDefinition(), annotationMetadata.getClassName(),new String[] { alias });
             BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
             //registry.registerBeanDefinition("ApiClient-" + getClientName(attributes),builder.getBeanDefinition());
         } catch (Exception e) {

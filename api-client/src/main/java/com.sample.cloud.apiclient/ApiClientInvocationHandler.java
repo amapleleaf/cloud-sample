@@ -10,11 +10,11 @@ import java.lang.reflect.Proxy;
 public class ApiClientInvocationHandler implements InvocationHandler {
     private ApplicationContext applicationContext;
     private Class<?> target;
-    private Class<? extends ApiClientInvoker> apiClientIncoker;
-    public ApiClientInvocationHandler(Class<?> target, ApplicationContext applicationContext,Class<? extends ApiClientInvoker> apiClientIncoker){
+    private Class<? extends ApiClientInvoker> apiClientInvoker;
+    public ApiClientInvocationHandler(Class<?> target, ApplicationContext applicationContext,Class<? extends ApiClientInvoker> apiClientInvoker){
         this.target = target;
         this.applicationContext = applicationContext;
-        this.apiClientIncoker = apiClientIncoker;
+        this.apiClientInvoker = apiClientInvoker;
     }
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -31,6 +31,6 @@ public class ApiClientInvocationHandler implements InvocationHandler {
         } else if ("toString".equals(method.getName())) {
             return target.toString();
         }
-        return applicationContext.getBean(apiClientIncoker).invoke(proxy,method,args);
+        return applicationContext.getBean(apiClientInvoker).invoke(proxy,method,args);
     }
 }

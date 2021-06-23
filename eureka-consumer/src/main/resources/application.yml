@@ -25,6 +25,11 @@ ribbon:
   ReadTimeout: 10000
   #刷新服务列表源的间隔时间
   ServerListRefreshInterval: 5000
+
+nacos-http-producer:
+  ribbon:
+    ReadTimeout: 3000
+
 management:
   endpoints:
     web:
