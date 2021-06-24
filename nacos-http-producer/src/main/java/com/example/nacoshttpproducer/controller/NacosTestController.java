@@ -52,4 +52,21 @@ public class NacosTestController {
         }
         return result;
     }
+    @RequestMapping("feignparam")
+    public Map<String,String> feignparam(String  key){
+        Map<String,String> result = new HashMap<>();
+        result.put("email.address",emailAddress);
+        result.put(key,env.getProperty(key));
+        result.put("server.port",env.getProperty("server.port"));
+        if("test".equals(key)){
+            //支持从nacos配置复杂的格式
+            result.put(key, JSON.toJSONString(applicationContext.getBean("testProperties")));
+        }
+        try {
+            Thread.sleep(15*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

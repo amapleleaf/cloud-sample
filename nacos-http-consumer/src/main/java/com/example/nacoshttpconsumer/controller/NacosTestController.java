@@ -1,11 +1,11 @@
 package com.example.nacoshttpconsumer.controller;
 
 import com.example.nacoshttpconsumer.form.IdInfo;
+import com.example.nacoshttpconsumer.remoteapi.ParamQueryApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
@@ -22,6 +22,8 @@ public class NacosTestController {
     private  RestTemplate restTemplate;
     @Autowired
     public ApplicationContext applicationContext;
+    @Autowired
+    private ParamQueryApi paramQueryApi;
     @RequestMapping("/consumerconfig")
     public String oneNacosConfig(String key){
         try {
@@ -41,4 +43,15 @@ public class NacosTestController {
         Map<String,Object> result = restTemplate.postForObject(nacosDubboClient+"/student",idNo, Map.class);
         return result;
     }
+
+    @RequestMapping("/testfeign")
+    public Map<String,String> testfeign(String key){
+        try {
+            log.info("-----------testfeign start---------------------------");
+            return paramQueryApi.feignparam(key);
+        } finally {
+            log.info("-----------testfeign end---------------------------");
+        }
+    }
+
 }
