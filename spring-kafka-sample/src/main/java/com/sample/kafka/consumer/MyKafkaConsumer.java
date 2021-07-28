@@ -4,7 +4,12 @@ import com.sample.kafka.producer.MyKafkaProducer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.core.ConsumerFactory;
+import org.springframework.kafka.listener.adapter.RecordFilterStrategy;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -16,6 +21,8 @@ import java.util.Optional;
 @Component
 public class MyKafkaConsumer {
     private static final Logger log = LoggerFactory.getLogger(MyKafkaConsumer.class);
+    @Autowired
+    private ConsumerFactory consumerFactory;
     //@KafkaListener(topics = MyKafkaProducer.TOPIC_TEST, groupId = MyKafkaProducer.TOPIC_GROUP)
     public void topic_test(List<ConsumerRecord<?, ?>> records, Acknowledgment ack) {
         try {
@@ -53,4 +60,23 @@ public class MyKafkaConsumer {
             ack.acknowledge();
         }
     }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory filterContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory factory = new ConcurrentKafkaListenerContainerFactory();
+        factory.setConsumerFactory(consumerFactory);
+        //配合RecordFilterStrategy使用，被过滤的信息将被丢弃
+        factory.setAckDiscarded(true);
+        factory.setRecordFilterStrategy(consumerRecord -> {
+            long data = Long.parseLong((String) consumerRecord.value());
+            log.info("filterContainerFactory filter : "+data);
+            if (data % 2 == 0) {
+                return false;
+            }
+            //返回true将会被丢弃
+            return true;
+        });
+        return factory;
+    }
+
 }

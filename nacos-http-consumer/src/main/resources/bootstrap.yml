@@ -47,3 +47,6 @@ ribbon:
 nacos-http-producer:
   ribbon:
     ReadTimeout: 3000
+logging:
+  level:
+    root: debug
